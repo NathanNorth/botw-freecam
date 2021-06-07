@@ -176,8 +176,7 @@ fn patch(_lib: LPVOID) -> Result<(), Box<dyn std::error::Error>> {
 
     let mut points: Vec<CameraSnapshot> = vec![];
 
-    //because this is mutable and primitive it can be treated like a normal variable
-    let mut pos = 0; //because it is an i32 it can be negative
+    let mut pos = 0; //holds our position in the sequence
 
     // This variable will hold the initial position when the freecamera is activated.
     let mut starting_point: Option<CameraSnapshot> = None;
