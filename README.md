@@ -1,6 +1,6 @@
 # Breath of the Wild Freecam
 
-FORKED FROM [etra0](https://github.com/etra0/botw-freecam) -'S AMAZING WORK. I have no clue how rust works so I'm not going to try and pollute thier codebase with my garbage.
+FORKED FROM [etra0](https://github.com/etra0/botw-freecam) -'S AMAZING WORK. I have no clue how rust works so I'm not going to try and pollute their codebase with my garbage.
 
 This is a BOTW Freecam. Simply run it and it should work.
 
