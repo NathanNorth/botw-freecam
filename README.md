@@ -30,6 +30,12 @@ Shift / X / A				Accelerates temporarily
 Tab / Square / X			Decelerate temporarily
 F7					Unlock the character (Locks the camera)
 ----- Sequence keys -----
+N/M					Select points in the sequence
+B					Move camera to selected point in sequence
+INSERT					Insert a point at current index (if point already exists items shift right)
+END					Replace the point at your currently selected index
+DELETE					Remove the point at your currently selected index
+
 F8					Breaks a current sequence playing
 F9					Add a point to the sequence
 F10					Plays the sequence

@@ -286,12 +286,12 @@ fn patch(_lib: LPVOID) -> Result<(), Box<dyn std::error::Error>> {
                 info!("Point inserted to sequence: {:?} at position: {}", cs, pos);
                 points.insert(pos, cs);
                 pos += 1;
-                std::thread::sleep(std::time::Duration::from_millis(400)); //sleep to avoid spam
+                std::thread::sleep(std::time::Duration::from_millis(400));
             }
 
             //replace point at selected index
             if check_key_press(winuser::VK_END) {
-                let cs = CameraSnapshot::new(&(*gc)); //copy paste get reference
+                let cs = CameraSnapshot::new(&(*gc));
                 if let Some(elem) = points.get_mut(pos) {
                     *elem = cs;
                     info!("Point replaced in sequence: {:?}", &elem);
@@ -299,7 +299,7 @@ fn patch(_lib: LPVOID) -> Result<(), Box<dyn std::error::Error>> {
                 else {
                     info!("No valid point selected!");
                 }
-                std::thread::sleep(std::time::Duration::from_millis(400)); //copy paste delay
+                std::thread::sleep(std::time::Duration::from_millis(400));
             }
 
             //delete point at selected index
@@ -338,12 +338,13 @@ fn patch(_lib: LPVOID) -> Result<(), Box<dyn std::error::Error>> {
                     info!("Moving to point {}", pos);
                     let dur = std::time::Duration::from_secs_f32(0.5);
                     let cs = CameraSnapshot::new(&(*gc)); //grab current location
-                    let copy = points.clone(); //clone full vector
-                    points = vec![cs, points[pos].clone()]; //create mini vector
-                    points.interpolate(&mut (*gc), dur, false); //on new vector
+                    let copy = points.clone(); //clone full sequence
+                    points = vec![cs, points[pos].clone()]; //create mini sequence
+                    points.interpolate(&mut (*gc), dur, false); //animate on new vector
                     points = copy; //reset main vector
                 } else {
-                    info!("There is no point at this index in the sequence!")
+                    info!("There is no point at this index in the sequence!");
+                    std::thread::sleep(std::time::Duration::from_millis(400));
                 }
             }
 
