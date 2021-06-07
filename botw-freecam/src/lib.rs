@@ -176,6 +176,9 @@ fn patch(_lib: LPVOID) -> Result<(), Box<dyn std::error::Error>> {
 
     let mut points: Vec<CameraSnapshot> = vec![];
 
+    //because this is mutable and primitive it can be treated like a normal variable
+    let mut pos = 0; //because it is an i32 it can be negative
+
     // This variable will hold the initial position when the freecamera is activated.
     let mut starting_point: Option<CameraSnapshot> = None;
 
@@ -277,16 +280,85 @@ fn patch(_lib: LPVOID) -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
 
+            //insert point at selected index
+            if check_key_press(winuser::VK_INSERT) {
+                let cs = CameraSnapshot::new(&(*gc));
+                info!("Point inserted to sequence: {:?} at position: {}", cs, pos);
+                points.insert(pos, cs);
+                pos += 1;
+                std::thread::sleep(std::time::Duration::from_millis(400)); //sleep to avoid spam
+            }
+
+            //replace point at selected index
+            if check_key_press(winuser::VK_END) {
+                let cs = CameraSnapshot::new(&(*gc)); //copy paste get reference
+                if let Some(elem) = points.get_mut(pos) {
+                    *elem = cs;
+                    info!("Point replaced in sequence: {:?}", &elem);
+                }
+                else {
+                    info!("No valid point selected!");
+                }
+                std::thread::sleep(std::time::Duration::from_millis(400)); //copy paste delay
+            }
+
+            //delete point at selected index
+            if check_key_press(winuser::VK_DELETE) {
+                if points.get(pos).is_some() {
+                    points.remove(pos);
+                    info!("{} point deleted!", pos);
+                } else {
+                    info!("There is no point at this index in the sequence!");
+                }
+                std::thread::sleep(std::time::Duration::from_millis(400));
+            }
+
+            //select next keyframe
+            if check_key_press(Keys::M as _) {
+                pos += 1;
+                if pos > points.len() { //don't overflow
+                    pos = points.len();
+                }
+                info!("Selected the {} point!", pos);
+                std::thread::sleep(std::time::Duration::from_millis(400));
+            }
+
+            //select previous keyframe
+            if check_key_press(Keys::N as _) {
+                if pos != 0 {
+                    pos -= 1;
+                }
+                info!("Selected the {} point!", pos);
+                std::thread::sleep(std::time::Duration::from_millis(400));
+            }
+
+            //animate to pos
+            if check_key_press(Keys::B as _) {
+                if points.get(pos).is_some() {
+                    info!("Moving to point {}", pos);
+                    let dur = std::time::Duration::from_secs_f32(0.5);
+                    let cs = CameraSnapshot::new(&(*gc)); //grab current location
+                    let copy = points.clone(); //clone full vector
+                    points = vec![cs, points[pos].clone()]; //create mini vector
+                    points.interpolate(&mut (*gc), dur, false); //on new vector
+                    points = copy; //reset main vector
+                } else {
+                    info!("There is no point at this index in the sequence!")
+                }
+            }
+
             if check_key_press(winuser::VK_F9) {
                 let cs = CameraSnapshot::new(&(*gc));
                 info!("Point added to interpolation: {:?}", cs);
                 points.push(cs);
+                pos = points.len();
                 std::thread::sleep(std::time::Duration::from_millis(400));
             }
 
             if check_key_press(winuser::VK_F11) {
                 info!("Sequence cleaned!");
                 points.clear();
+                pos = 0;
                 std::thread::sleep(std::time::Duration::from_millis(400));
             }
 

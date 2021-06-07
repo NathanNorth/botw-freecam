@@ -18,6 +18,12 @@ Shift / X / A\t\t\t\tAccelerates temporarily
 Tab / Circle / B\t\t\tDecelerate temporarily
 F7\t\t\t\t\tUnlock the character (Locks the camera)
 ----- Sequence keys -----
+N/M\t\t\t\t\tSelect points in the sequence
+B\t\t\t\t\tMove camera to selected point in sequence
+INSERT\t\t\t\t\tInsert a point at current index (if point already exists items shift right)
+END\t\t\t\t\tReplace the point at your currently selected index
+DELETE\t\t\t\t\tRemove the point at your currently selected index
+
 F8\t\t\t\t\tBreaks a current sequence playing
 F9\t\t\t\t\tAdd a point to the sequence
 F10\t\t\t\t\tPlays the sequence
@@ -30,7 +36,7 @@ const CARGO_VERSION: Option<&'static str> = option_env!("CARGO_PKG_VERSION");
 const GIT_VERSION: Option<&'static str> = option_env!("GIT_VERSION");
 
 /// Generate current version of the executable from the
-/// latest git version and the cargo verison.
+/// latest git version and the cargo version.
 pub fn get_version() -> String {
     let cargo = CARGO_VERSION.unwrap_or("Unknown");
     let git = GIT_VERSION.unwrap_or("Unknown");
