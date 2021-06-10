@@ -1,6 +1,6 @@
 [package]
 name = "botw-freecam"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Sebastián Aedo <sebastian.aedo@sansano.usm.cl>, NathanNorth <https://github.com/NathanNorth>"]
 edition = "2018"
 
@@ -11,8 +11,11 @@ memory-rs = { git = "https://github.com/etra0/memory-rs" }
 winapi = { version = "0.3", features = ["minwindef", "libloaderapi", "consoleapi", "wincon", "xinput"]}
 simplelog = "0.8"
 log = "0.4"
-nalgebra-glm = "0.3"
+nalgebra-glm = { version = "0.3", features = ["serde-serialize"] } #need serialize to convert types
 termcolor = "1.1"
+#storage
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 
 [build-dependencies]
 winres = "0.1"

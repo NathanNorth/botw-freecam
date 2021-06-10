@@ -3,8 +3,9 @@ use crate::utils::*;
 use nalgebra_glm as glm;
 use std::time::Duration;
 use winapi::um::winuser;
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraSnapshot {
     pub pos: glm::TVec3<f32>,
     pub focus: glm::TVec3<f32>,

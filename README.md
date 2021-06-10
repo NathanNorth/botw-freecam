@@ -1,6 +1,6 @@
 # Breath of the Wild Freecam
 
-FORKED FROM [etra0](https://github.com/etra0/botw-freecam) -'S AMAZING WORK. I have no clue how rust works so I'm not going to try and pollute their codebase with my garbage.
+FORKED FROM [etra0](https://github.com/etra0/botw-freecam) -'S AMAZING WORK.
 
 This is a BOTW Freecam. Simply run it and it should work.
 
@@ -17,6 +17,7 @@ Tested with Cemu 1.22.2 and Breath of the Wild v1.5.0 DLC Ver.3.0 (**Support for
 ## Controls:
 ```
 USAGE:
+----- Movement Controls -----
 F2 / L2 + Circle / RT + B		Activation
 WASD + Arrow keys / Sticks		Camera movement
 Q - E / R2 - L2 / RT - LT		Camera's height
@@ -39,6 +40,9 @@ B					Move camera to selected point in sequence
 INSERT					Insert a point at current index (if point already exists items shift right)
 END					Replace the point at your currently selected index
 DELETE					Remove the point at your currently selected index
+----- File Saving -----
+NUMPAD +                                Save current sequence to json
+NUMPAD -                                Load sequence from json
 ```
 
 # Thanks

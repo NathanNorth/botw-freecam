@@ -24,8 +24,9 @@ use dolly::*;
 use globals::*;
 use utils::{check_key_press, dummy_xinput, error_message, handle_keyboard, Input, Keys};
 
-use std::io::{self, Write};
+use std::io::{self, Write, Read};
 use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+use std::fs::OpenOptions;
 
 fn write_red(msg: &str) -> io::Result<()> {
     let mut stdout = StandardStream::stdout(ColorChoice::Always);
@@ -251,6 +252,35 @@ fn patch(_lib: LPVOID) -> Result<(), Box<dyn std::error::Error>> {
             std::thread::sleep(std::time::Duration::from_millis(500));
         }
 
+        //save current points to json
+        if check_key_press(winuser::VK_ADD) {
+            let str = serde_json::to_string_pretty(&points).unwrap();
+            let mut fil = OpenOptions::new().create(true).write(true).truncate(true).open("camSave.json").unwrap();
+            info!("Save created/updated!");
+            fil.write_all(str.as_ref()).unwrap();
+            std::thread::sleep(std::time::Duration::from_millis(400));
+        }
+
+        //read current points from json
+        if check_key_press(winuser::VK_SUBTRACT) {
+            let mut fil = match std::fs::File::open("camSave.json") {
+                Ok(f) => {
+                    info!("Save read successfully!");
+                    std::thread::sleep(std::time::Duration::from_millis(400));
+                    f
+                }
+                Err(_) => {
+                    info!("Error reading save!");
+                    std::thread::sleep(std::time::Duration::from_millis(400));
+                    continue;
+                }
+            };
+            let mut str: String = String::new();
+            fil.read_to_string(&mut str)?;
+            let deserialized: Vec<CameraSnapshot> = serde_json::from_str(&str).unwrap();
+            points = deserialized;
+        }
+
         unsafe {
             // If we don't have the camera struct we need to skip it right away
             if g_camera_struct == 0x0 {
@@ -276,6 +306,7 @@ fn patch(_lib: LPVOID) -> Result<(), Box<dyn std::error::Error>> {
                 if utils::calc_eucl_distance(&origin, &points[0].pos) > 400. {
                     warn!("Sequence cleaned to prevent game crashing");
                     points.clear();
+                    pos = 0;
                 }
             }
 
@@ -340,6 +371,7 @@ fn patch(_lib: LPVOID) -> Result<(), Box<dyn std::error::Error>> {
                     let copy = points.clone(); //clone full sequence
                     points = vec![cs, points[pos].clone()]; //create mini sequence
                     points.interpolate(&mut (*gc), dur, false); //animate on new vector
+                    input.fov = points[1].fov; //set new fov
                     points = copy; //reset main vector
                 } else {
                     info!("There is no point at this index in the sequence!");
