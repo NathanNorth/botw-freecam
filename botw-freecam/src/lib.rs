@@ -301,14 +301,14 @@ fn patch(_lib: LPVOID) -> Result<(), Box<dyn std::error::Error>> {
                 (*gc).clamp_distance(&p.pos);
             }
 
-            if !points.is_empty() {
-                let origin = (*gc).pos.into();
-                if utils::calc_eucl_distance(&origin, &points[0].pos) > 400. {
-                    warn!("Sequence cleaned to prevent game crashing");
-                    points.clear();
-                    pos = 0;
-                }
-            }
+            // if !points.is_empty() {
+            //     let origin = (*gc).pos.into();
+            //     if utils::calc_eucl_distance(&origin, &points[0].pos) > 400. {
+            //         warn!("Sequence cleaned to prevent game crashing");
+            //         points.clear();
+            //         pos = 0;
+            //     }
+            // }
 
             //insert point at selected index
             if check_key_press(winuser::VK_INSERT) {
